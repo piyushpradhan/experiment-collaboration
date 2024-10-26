@@ -3,6 +3,7 @@ package main
 import (
 	"collboration/api"
 	"collboration/storage"
+	"collboration/websocket"
 	"flag"
 	"fmt"
 	"log"
@@ -14,7 +15,9 @@ func main() {
 
 	store := storage.NewMemoryStorage()
 
+	go websocket.StartWebSocketServer(":7071")
 	server := api.NewServer(*listenAddr, store)
+
 
 	fmt.Println("Server running on port: ", *listenAddr)
 	log.Fatal(server.Start())
