@@ -1,8 +1,8 @@
 package api
 
 import (
-	"collboration/storage"
-	"collboration/util"
+	"collaboration/storage"
+	"collaboration/util"
 	"encoding/json"
 	"net/http"
 )

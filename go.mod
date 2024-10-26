@@ -1,4 +1,4 @@
-module collboration
+module collaboration
 
 go 1.23.0
 

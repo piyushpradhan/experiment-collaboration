@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"collaboration/types"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -10,33 +11,27 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type Client struct {
-	id string
-	color int
-	socket *websocket.Conn
-}
-
 type Hub struct {
-	clients map[*Client]bool
-	broadcast chan Message
-	register chan *Client
-	unregister chan *Client
-	mu sync.Mutex
+	clients    map[*types.Client]bool
+	broadcast  chan Message
+	register   chan *types.Client
+	unregister chan *types.Client
+	mu         sync.Mutex
 }
 
 type Message struct {
-	Sender string `json:"sender"`
-	Color string `json:"color"`
-	Name string `json:"username"`
-	X float64 `json:"x"`
-	Y float64 `json:"y"`
+	Sender string  `json:"sender"`
+	Color  string  `json:"color"`
+	Name   string  `json:"username"`
+	X      float64 `json:"x"`
+	Y      float64 `json:"y"`
 }
 
-var hub = Hub {
-	clients: make(map[*Client]bool),
-	broadcast: make(chan Message),
-	register: make(chan *Client),
-	unregister: make(chan *Client),
+var hub = Hub{
+	clients:    make(map[*types.Client]bool),
+	broadcast:  make(chan Message),
+	register:   make(chan *types.Client),
+	unregister: make(chan *types.Client),
 }
 
 func init() {
@@ -53,15 +48,15 @@ func (h *Hub) run() {
 		case client := <-h.unregister:
 			h.mu.Lock()
 			if _, ok := h.clients[client]; ok {
-				delete (h.clients, client)
-				client.socket.Close()
+				delete(h.clients, client)
+				client.Socket.Close()
 			}
 			h.mu.Unlock()
 		case message := <-h.broadcast:
 			h.mu.Lock()
 			for client := range h.clients {
-				if err := client.socket.WriteJSON(message); err != nil {
-					client.socket.Close()
+				if err := client.Socket.WriteJSON(message); err != nil {
+					client.Socket.Close()
 					delete(h.clients, client)
 				}
 			}
@@ -88,10 +83,10 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	client := &Client {
-		id: uuid.New().String(),
-		color: rand.Intn(360),
-		socket: conn,
+	client := &types.Client{
+		ID:     uuid.New().String(),
+		Color:  rand.Intn(360),
+		Socket: conn,
 	}
 
 	hub.register <- client
@@ -105,11 +100,8 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err := conn.ReadJSON(&msg); err != nil {
 			break
 		}
-		msg.Sender = client.id
-		msg.Color = strconv.Itoa(client.color)
+		msg.Sender = client.ID
+		msg.Color = strconv.Itoa(client.Color)
 		hub.broadcast <- msg
 	}
 }
-
-
-

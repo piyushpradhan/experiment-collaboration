@@ -1,6 +1,6 @@
 package storage
 
-import "collboration/types"
+import "collaboration/types"
 
 type MongoStorage struct {
 }
