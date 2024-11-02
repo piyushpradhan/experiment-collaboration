@@ -20,8 +20,17 @@ func NewServer(listenAddr string, store storage.Storage) *Server {
 }
 
 func (s *Server) Start() error {
-	http.HandleFunc("/user", s.handleGetUserById)
-	http.HandleFunc("/user/id", s.handleDeleteUserById)
+	allowedOrigins := []string{
+		"https://experiment.piyushpradhan.space",
+		"http://localhost",
+		"https://showoff-frontend.vercel.app",
+}
+
+	corsHandler := CORSMiddleware(allowedOrigins)
+
+	http.HandleFunc("/user", corsHandler(http.HandlerFunc(s.handleGetUserById)).ServeHTTP)
+	http.HandleFunc("/user/id", corsHandler(http.HandlerFunc(s.handleDeleteUserById)).ServeHTTP)
+
 	return http.ListenAndServe(s.listenAddr, nil)
 }
 
