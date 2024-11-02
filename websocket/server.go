@@ -24,7 +24,7 @@ func init() {
 
 func StartWebSocketServer(port string) {
 	http.HandleFunc("/ws", handleConnections)
-	err := http.ListenAndServeTLS(port, "certificate.pem", "key.pem", nil)
+	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		panic("Error spinning up WebSocket server: " + err.Error())
 	}
