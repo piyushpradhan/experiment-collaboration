@@ -58,7 +58,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err := conn.ReadJSON(&msg); err != nil {
 			break
 		}
-		msg.Sender = client.ID
+		client.ID = msg.Sender
 		msg.Color = strconv.Itoa(client.Color)
 		hub.Broadcast <- msg
 	}
