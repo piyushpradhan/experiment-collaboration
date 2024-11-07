@@ -2,8 +2,8 @@ package main
 
 import (
 	"collaboration/api"
+	"collaboration/cmd/collaboration"
 	"collaboration/storage"
-	"collaboration/websocket"
 	"flag"
 	"fmt"
 	"log"
@@ -15,7 +15,7 @@ func main() {
 
 	store := storage.NewMemoryStorage()
 
-	go websocket.StartWebSocketServer(":7071")
+	collaboration.InitializeCollaboration()
 	server := api.NewServer(*listenAddr, store)
 
 	fmt.Println("Server running on port: ", *listenAddr)
