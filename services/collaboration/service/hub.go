@@ -6,18 +6,18 @@ import (
 )
 
 type Hub struct {
-	clients map[*types.Client]bool
-	broadcast chan types.Message
-	register chan *types.Client
+	clients    map[*types.Client]bool
+	broadcast  chan types.Message
+	register   chan *types.Client
 	unregister chan *types.Client
-	mu sync.Mutex
+	mu         sync.Mutex
 }
 
-func NewHub() *Hub {
-	return &Hub{
-		clients: make(map[*types.Client]bool),
-		broadcast: make(chan types.Message),
-		register: make(chan *types.Client),
+func NewHub() Hub {
+	return Hub{
+		clients:    make(map[*types.Client]bool),
+		broadcast:  make(chan types.Message),
+		register:   make(chan *types.Client),
 		unregister: make(chan *types.Client),
 	}
 }
@@ -25,7 +25,7 @@ func NewHub() *Hub {
 func (h *Hub) Run() {
 	for {
 		select {
-		case client := <-h.register: 
+		case client := <-h.register:
 			h.mu.Lock()
 			h.clients[client] = true
 			h.mu.Unlock()
@@ -39,8 +39,12 @@ func (h *Hub) Run() {
 		case msg := <-h.broadcast:
 			h.mu.Lock()
 			for client := range h.clients {
-				client.Socket.WriteJSON(msg)
+				if err := client.Socket.WriteJSON(msg); err != nil {
+					client.Socket.Close()
+					delete(h.clients, client)
+				}
 			}
+			h.mu.Unlock()
 		}
 	}
 }

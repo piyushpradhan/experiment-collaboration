@@ -2,8 +2,8 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-bin = "bin/main"                   # Updated path to the binary
-cmd = "go build -o bin/main ./..." # Updated command to build the binary
+bin = "main"                   # Updated path to the binary
+cmd = "go build main.go" # Updated command to build the binary
 include_ext = ["go"]               # File extensions to watch
 exclude_dir = ["assets", "tmp"]    # Directories to exclude from watching
 

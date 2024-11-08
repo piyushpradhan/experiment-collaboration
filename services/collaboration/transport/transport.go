@@ -12,17 +12,12 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
-
 func StartWebSocketServer(svc collaboration.CollaborationService, port string) {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		handleConnections(svc, w, r)
 	})
 	err := http.ListenAndServe(port, nil)
+	fmt.Println("Working")
 	if err != nil {
 		panic("Error starting WebSocket server: " + err.Error())
 	}
@@ -30,15 +25,21 @@ func StartWebSocketServer(svc collaboration.CollaborationService, port string) {
 }
 
 func handleConnections(svc collaboration.CollaborationService, w http.ResponseWriter, r *http.Request) {
+	upgrader := websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		// TODO: Add log
 		return
 	}
 
-	client := &types.Client {
-		ID: uuid.New().String(),
-		Color: rand.Intn(360),
+	client := &types.Client{
+		ID:     uuid.New().String(),
+		Color:  rand.Intn(360),
 		Socket: conn,
 	}
 
@@ -58,3 +59,4 @@ func handleConnections(svc collaboration.CollaborationService, w http.ResponseWr
 		svc.BroadcastMessage(msg)
 	}
 }
+

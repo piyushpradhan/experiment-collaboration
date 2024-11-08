@@ -15,8 +15,8 @@ func main() {
 
 	store := storage.NewMemoryStorage()
 
-	collaboration.InitializeCollaboration()
 	server := api.NewServer(*listenAddr, store)
+	go collaboration.InitializeCollaboration()
 
 	fmt.Println("Server running on port: ", *listenAddr)
 	log.Fatal(server.Start())

@@ -12,7 +12,7 @@ type CollaborationService interface {
 }
 
 type collaborationService struct {
-	hub *Hub
+	hub Hub
 }
 
 func NewCollaborationService() CollaborationService {
