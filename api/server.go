@@ -24,7 +24,7 @@ func (s *Server) Start() error {
 		"https://experiment.piyushpradhan.space",
 		"http://localhost",
 		"https://showoff-frontend.vercel.app",
-}
+	}
 
 	corsHandler := CORSMiddleware(allowedOrigins)
 
@@ -35,15 +35,16 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) handleGetUserById(w http.ResponseWriter, r *http.Request) {
-	user := s.store.Get(10)
+	user, _ := s.store.Get(10)
 
 	json.NewEncoder(w).Encode(user)
 }
 
 func (s *Server) handleDeleteUserById(w http.ResponseWriter, r *http.Request) {
-	user := s.store.Get(10)
+	user, _ := s.store.Get(10)
 
 	_ = util.Round2Dec(10.3933)
 
 	json.NewEncoder(w).Encode(user)
 }
+

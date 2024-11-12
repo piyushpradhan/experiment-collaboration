@@ -1,8 +1,8 @@
 package collaboration
 
 import (
+	"collaboration/services/collaboration"
 	service "collaboration/services/collaboration/service"
-	transport "collaboration/services/collaboration/transport"
 )
 
 func InitializeCollaboration() {
@@ -10,8 +10,9 @@ func InitializeCollaboration() {
 
 	go collaborationService.Run()
 
-	transport.StartWebSocketServer(collaborationService, ":7071")
-	
+	collaboration.StartWebSocketServer(collaborationService, ":7071")
+
 	// Block unil an error occurs
 	select {}
 }
+
