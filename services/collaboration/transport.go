@@ -13,14 +13,14 @@ import (
 )
 
 func StartWebSocketServer(svc collaboration.CollaborationService, port string) {
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		handleConnections(svc, w, r)
 	})
+	fmt.Println("Starting websocket server on: ", port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		panic("Error starting WebSocket server: " + err.Error())
 	}
-	fmt.Println("Starting websocket server on: ", port)
 }
 
 func handleConnections(svc collaboration.CollaborationService, w http.ResponseWriter, r *http.Request) {

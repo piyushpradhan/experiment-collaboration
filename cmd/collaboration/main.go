@@ -10,9 +10,9 @@ func InitializeCollaboration() {
 
 	go collaborationService.Run()
 
-	collaboration.StartWebSocketServer(collaborationService, ":7071")
+	collaboration.StartWebSocketServer(collaborationService, ":5000")
 
-	// Block unil an error occurs
+	// Block until an error occurs
 	select {}
 }
 
