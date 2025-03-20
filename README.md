@@ -1,73 +1,113 @@
-# Experiment Collaboration Server
+# Collaboration Project
 
-A real-time collaboration server built with Go that enables concurrent editing and collaboration features through WebSocket connections.
+## Overview
+
+The Collaboration Project is a real-time web application that allows users to connect and communicate through a WebSocket server. It provides a simple API for user management and supports CORS for cross-origin requests. This project is built using Go and follows a microservices architecture.
 
 ## Features
 
-- Real-time collaboration through WebSocket connections
-- In-memory storage for managing collaboration sessions
-- RESTful API endpoints for session management
-- Concurrent editing support
-- Lightweight and efficient design
+- Real-time communication using WebSockets
+- User management API
+- CORS support for specified origins
+- In-memory storage for user data
+- Modular architecture for easy maintenance and scalability
 
-## Prerequisites
+## Technologies Used
 
-- Go 1.23.0 or higher
-- Git
+- Go (version 1.23.0)
+- Gorilla WebSocket
+- Go Kit for microservices
+- UUID for unique identifiers
 
-## Installation
+## Getting Started
+
+### Prerequisites
+
+- Go installed on your machine (version 1.23.0 or higher)
+- Git for version control
+
+### Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/experiment-collaboration.git
-cd experiment-collaboration
-```
+
+   ```bash
+   git clone https://github.com/piyushpradhan/experiment-collaboration.git
+   cd collaboration
+   ```
 
 2. Install dependencies:
-```bash
-go mod download
-```
 
-## Project Structure
+   ```bash
+   go mod tidy
+   ```
 
-```
-.
-├── api/        # API handlers and server implementation
-├── cmd/        # Command-line tools and entry points
-├── services/   # Business logic and service layer
-├── storage/    # Storage implementations (memory storage)
-├── types/      # Type definitions and interfaces
-├── util/       # Utility functions and helpers
-├── websocket/  # WebSocket handling and real-time communication
-├── main.go     # Application entry point
-└── .air.toml   # Air configuration for live reloading
-```
+### Running the Application
 
-## Running the Server
+To run the application, use the following command:
 
-1. Start the server with default settings:
 ```bash
 go run main.go
 ```
 
-2. Start the server with a custom port:
-```bash
-go run main.go -listenaddr :8080
+The server will start on port 5000 by default. You can change the port by modifying the `listenAddr` flag.
+
+### API Endpoints
+
+- **GET /user**: Retrieve user information by ID.
+- **DELETE /user/id**: Delete a user by ID.
+
+### WebSocket Connection
+
+To connect to the WebSocket server, use the following URL:
+
+```
+ws://localhost:5000/
 ```
 
-The server will start and listen on the specified port (default: 5000).
+## Directory Structure
 
-## Development
-
-For development with live reloading, you can use Air:
-
-```bash
-air
+```
+.
+├── api
+│   ├── decode.go
+│   ├── endpoint.go
+│   ├── server.go
+│   ├── service.go
+│   └── transport.go
+├── cmd
+│   ├── api
+│   │   └── main.go
+│   └── collaboration
+│       └── main.go
+├── services
+│   ├── api
+│   │   ├── middleware.go
+│   │   └── transport.go
+│   └── collaboration
+│       ├── endpoint.go
+│       ├── service
+│       │   └── service.go
+│       └── transport.go
+├── storage
+│   └── memory.go
+├── types
+│   ├── client.go
+│   ├── message.go
+│   └── user.go
+└── util
+    └── util.go
 ```
 
-This will automatically rebuild and restart the server when files change.
+## Contributing
 
-## Dependencies
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-- [github.com/google/uuid](https://github.com/google/uuid) - For generating unique identifiers
-- [github.com/gorilla/websocket](https://github.com/gorilla/websocket) - For WebSocket implementation
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to the Go community for their support and resources.
+- Inspired by various open-source projects and microservices architecture principles.
+VB
